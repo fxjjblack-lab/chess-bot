@@ -1,5 +1,5 @@
 -- Stockfish 18 Bot — XADREZ! Roblox
-local SERVER = "http://192.168.0.62:8081/move"
+local SERVER = "http://192.168.1.13:8081/move"
 local RS = game:GetService("ReplicatedStorage")
 local LP = game.Players.LocalPlayer
 local WHITE_COLOR = Color3.new(0.85098, 0.843137, 0.788235)
