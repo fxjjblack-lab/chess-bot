@@ -49,23 +49,6 @@ local function getFEN(myTurn)
     return table.concat(rows,"/").." "..(myTurn and "w" or "b").." KQkq - 0 1"
 end
 
-local function isMyTurn()
-    -- Verifica pelo texto no topo da tela (CoreGui)
-    local coreGui = game:GetService("CoreGui")
-    for _, gui in ipairs(coreGui:GetDescendants()) do
-        if gui:IsA("TextLabel") and gui.Text:find(LP.Name) then
-            return true
-        end
-    end
-    for _, gui in ipairs(LP.PlayerGui:GetDescendants()) do
-        if gui:IsA("TextLabel") then
-            local t = gui.Text
-            if (t:find("vez") or t:find("Turno")) and t:find(LP.Name) then return true end
-        end
-    end
-    return false
-end
-
 local function getMyColor()
     local pieces = workspace:FindFirstChild("Pieces")
     local board  = workspace:FindFirstChild("Board")
@@ -130,7 +113,7 @@ statusL.Size = UDim2.new(1, 0, 0, 28)
 statusL.Position = UDim2.new(0, 0, 0, 38)
 statusL.BackgroundTransparency = 1
 statusL.Text = "Pronto!"
-statusL.TextColor3 = Color3.fromRGB(180,180,180)
+statusL.TextColor3 = Color3.fromRGB(180, 180, 180)
 statusL.TextScaled = true
 statusL.Font = Enum.Font.Gotham
 statusL.ZIndex = 2
@@ -199,7 +182,7 @@ end)
 task.spawn(function()
     while true do
         task.wait(1.5)
-        if autoOn and isMyTurn() then
+        if autoOn then
             pcall(doBestMove)
             task.wait(1)
         end
