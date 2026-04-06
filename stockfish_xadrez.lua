@@ -114,7 +114,7 @@ local statusL = Instance.new("TextLabel")
 statusL.Size = UDim2.new(1, 0, 0, 28)
 statusL.Position = UDim2.new(0, 0, 0, 38)
 statusL.BackgroundTransparency = 1
-statusL.Text = "Pronto! F=BestMove G=Auto"
+statusL.Text = "Pronto! H=BestMove G=Auto"
 statusL.TextColor3 = Color3.fromRGB(180, 180, 180)
 statusL.TextScaled = true
 statusL.Font = Enum.Font.Gotham
@@ -155,13 +155,13 @@ local function doBestMove()
     local move = getStockfishMove(fen)
     if not move then statusL.Text = "Erro: servidor" return end
     executeMove(move)
-    statusL.Text = "Pronto! F=BestMove G=Auto"
+    statusL.Text = "Pronto! H=BestMove G=Auto"
     jogadaL.Text = "Jogada: "..move
 end
 
 -- Tecla F = Best Move
 UIS.InputBegan:Connect(function(input, gp)
-    if input.KeyCode == Enum.KeyCode.F then
+    if input.KeyCode == Enum.KeyCode.H then
         pcall(doBestMove)
     end
     if input.KeyCode == Enum.KeyCode.G then
@@ -187,4 +187,4 @@ task.spawn(function()
     end
 end)
 
-print("[SF18] Bot carregado! F=BestMove G=Auto")
+print("[SF18] Bot carregado! H=BestMove G=Auto")
