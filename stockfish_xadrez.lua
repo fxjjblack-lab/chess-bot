@@ -148,13 +148,14 @@ sg.ResetOnSpawn = false
 sg.Parent = LP.PlayerGui
 
 local f = Instance.new("Frame")
-f.Size = UDim2.new(0, 260, 0, 220)
+f.Size = UDim2.new(0, 260, 0, 240)
 f.Position = UDim2.new(0, 20, 0, 20)
 f.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 f.Active = true
 f.Draggable = true
+f.ClipsDescendants = false
 f.Parent = sg
-Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
+-- sem UICorner no frame
 
 -- Título
 local title = Instance.new("TextLabel")
