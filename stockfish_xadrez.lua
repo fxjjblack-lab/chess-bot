@@ -24,9 +24,9 @@ local function getFEN(myTurn)
         local mesh = p:FindFirstChildWhichIsA("BasePart")
         if mesh then
             for _, cell in ipairs(board:GetChildren()) do
-                if math.abs(cell.Position.X - mesh.Position.X) < 2 and math.abs(cell.Position.Z - mesh.Position.Z) < 2 then
-                    local col, row = cell.Name:match("(%d+),(%d+)")
-                    col, row = tonumber(col), tonumber(row)
+                if math.abs(cell.Position.X-mesh.Position.X)<2 and math.abs(cell.Position.Z-mesh.Position.Z)<2 then
+                    local col,row = cell.Name:match("(%d+),(%d+)")
+                    col,row = tonumber(col),tonumber(row)
                     if col and row then
                         local n = PIECE_MAP[p.Name] or "p"
                         grid[row][col] = isWhite(mesh.Color) and n:upper() or n
@@ -38,13 +38,13 @@ local function getFEN(myTurn)
     end
     local rows = {}
     for row=8,1,-1 do
-        local s, e = "", 0
+        local s,e = "",0
         for col=1,8 do
             local pc = grid[row][col]
             if pc then if e>0 then s=s..e e=0 end s=s..pc else e=e+1 end
         end
         if e>0 then s=s..e end
-        table.insert(rows, s)
+        table.insert(rows,s)
     end
     return table.concat(rows,"/").." "..(myTurn and "w" or "b").." KQkq - 0 1"
 end
@@ -99,43 +99,43 @@ local sg = Instance.new("ScreenGui")
 sg.ResetOnSpawn = false
 sg.Parent = LP.PlayerGui
 
--- Fundo fixo (não arrastra)
-local bg = Instance.new("Frame")
-bg.Size = UDim2.new(0, 260, 0, 230)
-bg.Position = UDim2.new(0, 20, 0, 20)
-bg.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-bg.BorderSizePixel = 0
-bg.Parent = sg
+local f = Instance.new("Frame")
+f.Size = UDim2.new(0, 260, 0, 230)
+f.Position = UDim2.new(0, 20, 0, 20)
+f.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+f.Active = true
+f.Draggable = true
+f.Parent = sg
 
--- Título
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(0, 220, 0, 35)
-title.Position = UDim2.new(0, 20, 0, 25)
+title.Size = UDim2.new(1, 0, 0, 35)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "Stockfish 18 - 4000 ELO"
 title.TextColor3 = Color3.fromRGB(255, 200, 0)
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
-title.Parent = sg
+title.ZIndex = 2
+title.Parent = f
 
--- Status
 local statusL = Instance.new("TextLabel")
-statusL.Size = UDim2.new(0, 250, 0, 25)
-statusL.Position = UDim2.new(0, 25, 0, 62)
+statusL.Size = UDim2.new(1, 0, 0, 28)
+statusL.Position = UDim2.new(0, 0, 0, 38)
 statusL.BackgroundTransparency = 1
 statusL.Text = "Pronto!"
 statusL.TextColor3 = Color3.fromRGB(180,180,180)
 statusL.TextScaled = true
 statusL.Font = Enum.Font.Gotham
-statusL.Parent = sg
+statusL.ZIndex = 2
+statusL.Parent = f
 
--- Botão Best Move
 local bestBtn = Instance.new("ImageButton")
-bestBtn.Size = UDim2.new(0, 240, 0, 60)
-bestBtn.Position = UDim2.new(0, 30, 0, 95)
-bestBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 80)
+bestBtn.Size = UDim2.new(1,-10,0,60)
+bestBtn.Position = UDim2.new(0,5,0,72)
+bestBtn.BackgroundColor3 = Color3.fromRGB(0,160,80)
 bestBtn.Image = ""
-bestBtn.Parent = sg
+bestBtn.ZIndex = 2
+bestBtn.Parent = f
 local bestL = Instance.new("TextLabel")
 bestL.Size = UDim2.new(1,0,1,0)
 bestL.BackgroundTransparency = 1
@@ -143,17 +143,17 @@ bestL.Text = "BEST MOVE"
 bestL.TextColor3 = Color3.white
 bestL.TextScaled = true
 bestL.Font = Enum.Font.GothamBold
-bestL.ZIndex = 4
+bestL.ZIndex = 10
 bestL.Parent = bestBtn
 
--- Botão Auto
 local autoOn = false
 local autoBtn = Instance.new("ImageButton")
-autoBtn.Size = UDim2.new(0, 240, 0, 60)
-autoBtn.Position = UDim2.new(0, 30, 0, 165)
-autoBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+autoBtn.Size = UDim2.new(1,-10,0,60)
+autoBtn.Position = UDim2.new(0,5,0,145)
+autoBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
 autoBtn.Image = ""
-autoBtn.Parent = sg
+autoBtn.ZIndex = 2
+autoBtn.Parent = f
 local autoL = Instance.new("TextLabel")
 autoL.Size = UDim2.new(1,0,1,0)
 autoL.BackgroundTransparency = 1
@@ -161,10 +161,9 @@ autoL.Text = "AUTO: OFF"
 autoL.TextColor3 = Color3.white
 autoL.TextScaled = true
 autoL.Font = Enum.Font.GothamBold
-autoL.ZIndex = 4
+autoL.ZIndex = 10
 autoL.Parent = autoBtn
 
--- Lógica
 local function doBestMove()
     statusL.Text = "Calculando..."
     if not isMyTurn() then statusL.Text = "Nao e seu turno" return end
@@ -175,7 +174,7 @@ local function doBestMove()
     local move = getStockfishMove(fen)
     if not move then statusL.Text = "Erro: servidor" return end
     executeMove(move)
-    statusL.Text = "Jogada: " .. move
+    statusL.Text = "Jogada: "..move
 end
 
 bestBtn.MouseButton1Click:Connect(function() pcall(doBestMove) end)
@@ -183,10 +182,10 @@ bestBtn.MouseButton1Click:Connect(function() pcall(doBestMove) end)
 autoBtn.MouseButton1Click:Connect(function()
     autoOn = not autoOn
     if autoOn then
-        autoBtn.BackgroundColor3 = Color3.fromRGB(200, 100, 0)
+        autoBtn.BackgroundColor3 = Color3.fromRGB(200,100,0)
         autoL.Text = "AUTO: ON"
     else
-        autoBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        autoBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
         autoL.Text = "AUTO: OFF"
     end
 end)
