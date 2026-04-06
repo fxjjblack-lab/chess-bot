@@ -196,34 +196,30 @@ screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = LP.PlayerGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 240, 0, 200)
-frame.Position = UDim2.new(0, 10, 0, 10)
+frame.Size = UDim2.new(0, 260, 0, 210)
+frame.Position = UDim2.new(0, 20, 0, 20)
 frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BackgroundTransparency = 0
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
 frame.Parent = screenGui
 
--- Borda
-local uicorner = Instance.new("UICorner")
-uicorner.CornerRadius = UDim.new(0, 8)
-uicorner.Parent = frame
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
 
--- Título
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, -30, 0, 30)
-title.Position = UDim2.new(0, 0, 0, 0)
+title.Size = UDim2.new(1, -35, 0, 36)
+title.Position = UDim2.new(0, 5, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "♟ Stockfish 18 — 4000 ELO"
+title.Text = "Stockfish 18 - 4000 ELO"
 title.TextColor3 = Color3.fromRGB(255, 200, 0)
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
 title.Parent = frame
 
--- Botão fechar
 local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 25, 0, 25)
-closeBtn.Position = UDim2.new(1, -28, 0, 3)
+closeBtn.Size = UDim2.new(0, 28, 0, 28)
+closeBtn.Position = UDim2.new(1, -32, 0, 4)
 closeBtn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
 closeBtn.Text = "X"
 closeBtn.TextColor3 = Color3.white
@@ -236,22 +232,27 @@ closeBtn.MouseButton1Click:Connect(function()
     screenGui:Destroy()
 end)
 
--- Status
+local sep = Instance.new("Frame")
+sep.Size = UDim2.new(1, -10, 0, 1)
+sep.Position = UDim2.new(0, 5, 0, 38)
+sep.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+sep.BorderSizePixel = 0
+sep.Parent = frame
+
 local status = Instance.new("TextLabel")
-status.Size = UDim2.new(1, -10, 0, 25)
-status.Position = UDim2.new(0, 5, 0, 33)
+status.Size = UDim2.new(1, -10, 0, 28)
+status.Position = UDim2.new(0, 5, 0, 42)
 status.BackgroundTransparency = 1
-status.Text = "Status: Aguardando..."
-status.TextColor3 = Color3.fromRGB(200, 200, 200)
+status.Text = "Status: Pronto!"
+status.TextColor3 = Color3.fromRGB(180, 180, 180)
 status.TextScaled = true
 status.Font = Enum.Font.Gotham
 status.Parent = frame
 
--- Botão Best Move
 local bestBtn = Instance.new("TextButton")
-bestBtn.Size = UDim2.new(1, -10, 0, 40)
-bestBtn.Position = UDim2.new(0, 5, 0, 70)
-bestBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
+bestBtn.Size = UDim2.new(1, -10, 0, 55)
+bestBtn.Position = UDim2.new(0, 5, 0, 74)
+bestBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 80)
 bestBtn.Text = "BEST MOVE"
 bestBtn.TextColor3 = Color3.white
 bestBtn.Font = Enum.Font.GothamBold
@@ -260,11 +261,10 @@ bestBtn.BorderSizePixel = 0
 Instance.new("UICorner", bestBtn).CornerRadius = UDim.new(0, 6)
 bestBtn.Parent = frame
 
--- Toggle Automático
 local autoOn = false
 local autoBtn = Instance.new("TextButton")
-autoBtn.Size = UDim2.new(1, -10, 0, 40)
-autoBtn.Position = UDim2.new(0, 5, 0, 118)
+autoBtn.Size = UDim2.new(1, -10, 0, 55)
+autoBtn.Position = UDim2.new(0, 5, 0, 138)
 autoBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 autoBtn.Text = "AUTO: OFF"
 autoBtn.TextColor3 = Color3.white
