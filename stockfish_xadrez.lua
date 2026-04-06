@@ -50,6 +50,13 @@ local function getFEN(myTurn)
 end
 
 local function isMyTurn()
+    -- Verifica pelo texto no topo da tela (CoreGui)
+    local coreGui = game:GetService("CoreGui")
+    for _, gui in ipairs(coreGui:GetDescendants()) do
+        if gui:IsA("TextLabel") and gui.Text:find(LP.Name) then
+            return true
+        end
+    end
     for _, gui in ipairs(LP.PlayerGui:GetDescendants()) do
         if gui:IsA("TextLabel") then
             local t = gui.Text
@@ -166,7 +173,6 @@ autoL.Parent = autoBtn
 
 local function doBestMove()
     statusL.Text = "Calculando..."
-    if not isMyTurn() then statusL.Text = "Nao e seu turno" return end
     local myColor = getMyColor()
     local fen = getFEN(myColor == "white")
     if not fen then statusL.Text = "Erro: tabuleiro" return end
