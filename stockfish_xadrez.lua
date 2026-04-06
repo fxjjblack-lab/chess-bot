@@ -1,7 +1,9 @@
 -- Stockfish 18 Bot — XADREZ! Roblox
+-- F = Best Move | G = Auto ON/OFF
 local SERVER = "http://192.168.1.13:8081/move"
 local RS = game:GetService("ReplicatedStorage")
 local LP = game.Players.LocalPlayer
+local UIS = game:GetService("UserInputService")
 local WHITE_COLOR = Color3.new(0.85098, 0.843137, 0.788235)
 local PIECE_MAP = {King="k",Queen="q",Rook="r",Bishop="b",Knight="n",Pawn="p"}
 
@@ -90,7 +92,7 @@ sg.ResetOnSpawn = false
 sg.Parent = LP.PlayerGui
 
 local f = Instance.new("Frame")
-f.Size = UDim2.new(0, 260, 0, 230)
+f.Size = UDim2.new(0, 260, 0, 160)
 f.Position = UDim2.new(0, 20, 0, 20)
 f.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 f.Active = true
@@ -112,47 +114,37 @@ local statusL = Instance.new("TextLabel")
 statusL.Size = UDim2.new(1, 0, 0, 28)
 statusL.Position = UDim2.new(0, 0, 0, 38)
 statusL.BackgroundTransparency = 1
-statusL.Text = "Pronto!"
+statusL.Text = "Pronto! F=BestMove G=Auto"
 statusL.TextColor3 = Color3.fromRGB(180, 180, 180)
 statusL.TextScaled = true
 statusL.Font = Enum.Font.Gotham
 statusL.ZIndex = 2
 statusL.Parent = f
 
-local bestBtn = Instance.new("ImageButton")
-bestBtn.Size = UDim2.new(1,-10,0,60)
-bestBtn.Position = UDim2.new(0,5,0,72)
-bestBtn.BackgroundColor3 = Color3.fromRGB(0,160,80)
-bestBtn.Image = ""
-bestBtn.ZIndex = 2
-bestBtn.Parent = f
-local bestL = Instance.new("TextLabel")
-bestL.Size = UDim2.new(1,0,1,0)
-bestL.BackgroundTransparency = 1
-bestL.Text = "BEST MOVE"
-bestL.TextColor3 = Color3.white
-bestL.TextScaled = true
-bestL.Font = Enum.Font.GothamBold
-bestL.ZIndex = 10
-bestL.Parent = bestBtn
-
-local autoOn = false
-local autoBtn = Instance.new("ImageButton")
-autoBtn.Size = UDim2.new(1,-10,0,60)
-autoBtn.Position = UDim2.new(0,5,0,145)
-autoBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
-autoBtn.Image = ""
-autoBtn.ZIndex = 2
-autoBtn.Parent = f
 local autoL = Instance.new("TextLabel")
-autoL.Size = UDim2.new(1,0,1,0)
+autoL.Size = UDim2.new(1, 0, 0, 28)
+autoL.Position = UDim2.new(0, 0, 0, 70)
 autoL.BackgroundTransparency = 1
 autoL.Text = "AUTO: OFF"
-autoL.TextColor3 = Color3.white
+autoL.TextColor3 = Color3.fromRGB(150, 150, 150)
 autoL.TextScaled = true
 autoL.Font = Enum.Font.GothamBold
-autoL.ZIndex = 10
-autoL.Parent = autoBtn
+autoL.ZIndex = 2
+autoL.Parent = f
+
+local jogadaL = Instance.new("TextLabel")
+jogadaL.Size = UDim2.new(1, 0, 0, 28)
+jogadaL.Position = UDim2.new(0, 0, 0, 100)
+jogadaL.BackgroundTransparency = 1
+jogadaL.Text = ""
+jogadaL.TextColor3 = Color3.fromRGB(0, 200, 100)
+jogadaL.TextScaled = true
+jogadaL.Font = Enum.Font.GothamBold
+jogadaL.ZIndex = 2
+jogadaL.Parent = f
+
+-- Lógica
+local autoOn = false
 
 local function doBestMove()
     statusL.Text = "Calculando..."
@@ -163,22 +155,28 @@ local function doBestMove()
     local move = getStockfishMove(fen)
     if not move then statusL.Text = "Erro: servidor" return end
     executeMove(move)
-    statusL.Text = "Jogada: "..move
+    statusL.Text = "Pronto! F=BestMove G=Auto"
+    jogadaL.Text = "Jogada: "..move
 end
 
-bestBtn.MouseButton1Click:Connect(function() pcall(doBestMove) end)
-
-autoBtn.MouseButton1Click:Connect(function()
-    autoOn = not autoOn
-    if autoOn then
-        autoBtn.BackgroundColor3 = Color3.fromRGB(200,100,0)
-        autoL.Text = "AUTO: ON"
-    else
-        autoBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
-        autoL.Text = "AUTO: OFF"
+-- Tecla F = Best Move
+UIS.InputBegan:Connect(function(input, gp)
+    if input.KeyCode == Enum.KeyCode.F then
+        pcall(doBestMove)
+    end
+    if input.KeyCode == Enum.KeyCode.G then
+        autoOn = not autoOn
+        if autoOn then
+            autoL.Text = "AUTO: ON"
+            autoL.TextColor3 = Color3.fromRGB(200, 100, 0)
+        else
+            autoL.Text = "AUTO: OFF"
+            autoL.TextColor3 = Color3.fromRGB(150, 150, 150)
+        end
     end
 end)
 
+-- Loop automático
 task.spawn(function()
     while true do
         task.wait(1.5)
@@ -189,4 +187,4 @@ task.spawn(function()
     end
 end)
 
-print("[SF18] Bot carregado!")
+print("[SF18] Bot carregado! F=BestMove G=Auto")
